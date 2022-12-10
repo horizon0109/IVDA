@@ -2,7 +2,7 @@
   <div>
     <v-container fluid>
       <v-row>
-        <v-col cols="12" md="10">
+        <v-col cols="12" md="20">
           <ScatterPlot/>
         </v-col>
         <v-col cols="12" md="10">

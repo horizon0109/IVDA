@@ -1,58 +1,107 @@
 <template>
-  <div style="height: 90vh">
-    <div ref='WordCloudPlot' style="height: inherit">
+  <div id="WordCloudPlot" style="height: inherit" >
+    <div class="item">
+      <div id="mzgqc" style="width: 1200px;height:700px;"></div>
+      <!--      <div id="line"></div>-->
+      <div class="search">
+        <el-select @change="changeFun" v-model="sharch" placeholder="Please select:">
+          <el-option
+              v-for="item in headList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+          </el-option>
+        </el-select>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import {myEcharts} from '../util/wordcloud'
+import axios from 'axios'
 export default {
-  name: "WordCloud",
-  data() {return{
-  }},
+  name: "WordCloudPlot",
+  data() {
+    return {
+      address:[
+        { label: 'Lack of Health Insurance', value: 'Lack of Health Insurance'},
+        { label: 'Arthritis', value: 'Arthritis'},
+        { label: 'Binge Drinking', value: 'Binge Drinking'},
+        { label: 'High Blood Pressure', value: 'High Blood Pressure'},
+        { label: 'Blood Pressure Medication', value: 'Blood Pressure Medication'},
+        { label: 'Cancer', value: 'Cancer'},
+        { label: 'Asthma', value: 'Asthma'},
+        { label: 'Coronary Heart Disease', value: 'Coronary Heart Disease'},
+        { label: 'Annual Checkup', value: 'Annual Checkup'},
+        { label: 'Cholesterol Screening', value: 'Cholesterol Screening'},
+        { label: 'Colonoscopy', value: 'Colonoscopy'},
+        { label: 'Chronic obstructive pulmonary disease', value: 'Chronic obstructive pulmonary disease'},
+        { label: 'Preventive Services (Older Men)', value: 'Preventive Services (Older Men)'},
+        { label: 'Preventive Services (Older Women)', value: 'Preventive Services (Older Women)'},
+        { label: 'Smoking', value: 'Smoking'},
+        { label: 'Dental Visit', value: 'Dental Visit'},
+        { label: 'Diabetes', value: 'Diabetes'},
+        { label: 'High Cholesterol', value: 'High Cholesterol'},
+        { label: 'Kidney Disease', value: 'Kidney Disease'},
+        { label: 'Physical Inactivity', value: 'Physical Inactivity'},
+        { label: 'Mammography', value: 'Mammography'},
+        { label: 'Poor Mental Health', value: 'Poor Mental Health'},
+        { label: 'Obesity', value: 'Obesity'},
+        { label: 'Cervical Cancer Screening', value: 'Cervical Cancer Screening'},
+        { label: 'Poor Physical Health', value: 'Poor Physical Health'},
+        { label: 'Sleep < 7 hrs', value: 'Sleep < 7 hrs'},
+        { label: 'Stroke', value: 'Stroke'},
+        { label: 'Teethlost', value: 'Teethlost'}
+      ],
+      list: [],
+      headList: [],
+      sharch: ''
+    }
+  },
   mounted() {
-    this.drawWordCloudPlot()
+    this.getList()
   },
   methods: {
-    drawWordCloudPlot(){
-      let domDiv = this.$refs.WordCloudPlot
-      let myWordCloudPlot = this.$echarts.init(domDiv)
-      let option = {
-        xAxis: {},
-        yAxis: {},
-        series: [
-          {
-            symbolSize: 20,
-            data: [
-              [10.0, 8.04],
-              [8.07, 6.95],
-              [13.0, 7.58],
-              [9.05, 8.81],
-              [11.0, 8.33],
-              [14.0, 7.66],
-              [13.4, 6.81],
-              [10.0, 6.33],
-              [14.0, 8.96],
-              [12.5, 6.82],
-              [9.15, 7.2],
-              [11.5, 7.2],
-              [3.03, 4.23],
-              [12.2, 7.83],
-              [2.02, 4.47],
-              [1.05, 3.33],
-              [4.05, 4.96],
-              [6.03, 7.24],
-              [12.0, 6.26],
-              [12.0, 8.84],
-              [7.08, 5.82],
-              [5.02, 5.68]
-            ],
-            type: 'scatter'
+    drawWordCloudPlot() {
+      axios({
+        method: 'POST',
+        url: 'http://127.0.0.1:5000/word',
+        data: {
+          sharch: this.sharch
+        }
+      }).then(res => {
+        myEcharts(res.data,this.sharch)
+      })
+    },
+    changeFun() {
+      this.drawWordCloudPlot()
+    },
+    getList() {
+      axios({
+        url: 'http://127.0.0.1:5000/list',
+        method: 'get'
+      }).then(res => {
+        res.data.shift()
+        //console.log(this.sharch)
+        this.headList = []
+        res.data.forEach((el,index) => {
+          let obj = {
+            label: el,
+            value: el
           }
-        ]
-      }
-      myWordCloudPlot.setOption(option)
-    }
+          this.headList.push(obj)
+          if(index === 0) {
+            this.sharch = el
+          }
+        })
+        console.log('test1')
+        console.log(this.sharch)
+        console.log('test2')
+        console.log(typeof(this.sharch))
+        this.drawWordCloudPlot()
+      })
+    },
   }
 }
 </script>

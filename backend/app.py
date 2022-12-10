@@ -58,6 +58,27 @@ def scatter(sharch):
         arr.append(obj)
     return arr
 
+def wordcloud(sharch):
+    X_train = df[df.columns[4:-1]].drop(sharch, axis=1)
+    y_train = df[sharch]
+    selected_feature = []
+    scores = []
+
+    # select feature by person coefficient
+    skb = SelectKBest(score_func=f_regression, k=27)
+    skb.fit(X_train, y_train)
+    for i in skb.get_support(indices=True):
+        selected_feature += [X_train.columns[i]]
+    scores = skb.scores_
+
+    arr = []
+    for i in range(len(selected_feature)):
+        obj = {}
+        obj['name'] = selected_feature[i]
+        obj['value'] = scores[i]
+        arr.append(obj)
+    return arr
+
 app = Flask(__name__)
 
 # 127.0.0.1:5000
@@ -67,6 +88,11 @@ def hello_world():
     #return scatter(sharch)
     return json.dumps(scatter(sharch))
 
+@app.route('/word', methods=['GET', 'POST'])
+def word():
+    sharch = request.json.get("sharch")
+    #return scatter(sharch)
+    return json.dumps(wordcloud(sharch))
 
 # 127.0.0.1:5000/list
 @app.route('/list')

@@ -4,18 +4,18 @@
       <h2>Timi - 500 Cities CDC</h2>
     </v-app-bar>
     <v-main>
-      <ScatterPlot/>
+      <ConfigurationPanel/>
     </v-main>
   </v-app>
 </template>
 
 
 <script>
-import ScatterPlot from "./components/ScatterPlot";
+import ConfigurationPanel from "./components/ConfigurationPanel";
 export default {
   name: 'App',
   components: {
-    ScatterPlot,
+    ConfigurationPanel,
   },
   data: () => ({
     //

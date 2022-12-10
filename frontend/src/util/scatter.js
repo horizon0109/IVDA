@@ -14,25 +14,25 @@ export function myEcharts(data,sharch) {
             top: 0
         },
         grid: [
-            { left: '7%', top: '7%', width: '38%', height: '38%' },
-            { right: '7%', top: '7%', width: '38%', height: '38%' },
-            { left: '7%', bottom: '7%', width: '38%', height: '38%' },
-            { right: '7%', bottom: '7%', width: '38%', height: '38%' }
+            { left: '5%', top: '12%', width: '38%', height: '38%' },
+            { right: '7%', top: '12%', width: '38%', height: '38%' },
+            { left: '5%', bottom: '3%', width: '38%', height: '38%' },
+            { right: '7%', bottom: '3%', width: '38%', height: '38%' }
         ],
         tooltip: {
             formatter: '{a}: ({c})'
         },
         xAxis: [
-            { gridIndex: 0},
-            { gridIndex: 1},
-            { gridIndex: 2},
-            { gridIndex: 3}
+            { gridIndex: 0, name: sharch},
+            { gridIndex: 1, name: sharch},
+            { gridIndex: 2, name: sharch},
+            { gridIndex: 3, name: sharch}
         ],
         yAxis: [
-            { gridIndex: 0},
-            { gridIndex: 1},
-            { gridIndex: 2},
-            { gridIndex: 3}
+            { gridIndex: 0, name: data[0]['address']},
+            { gridIndex: 1, name: data[1]['address']},
+            { gridIndex: 2, name: data[2]['address']},
+            { gridIndex: 3, name: data[3]['address']}
         ],
         series: [
             {
